@@ -17,7 +17,7 @@ def depth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gener
     #
     #     for each neighbor v of u:
     #         if v is not a wall and not visited:
-    #             let v.parent = next
+    #             let v.parent = u
     #             add v to the end of discovered
 
     discovered = [start]
@@ -58,7 +58,7 @@ def breadth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gen
     #
     #     for each neighbor v of u:
     #         if v is not a wall and not visited:
-    #             let v.parent = next
+    #             let v.parent = u
     #             add v to the end of discovered
 
     discovered = [start]
@@ -100,7 +100,7 @@ def dijkstra(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[
     #     for each neighbor v of u:
     #         let new_cost = u.total_cost + cost of moving to v
     #         if v is not visited and new_cost < v.total_cost:
-    #             let v.parent = next
+    #             let v.parent = u
     #             let v.total_cost = new_cost
     #             add v to discovered
 
@@ -157,7 +157,7 @@ def a_star(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Ce
     #     for each neighbor v of u:
     #         let new_cost = u.total_cost + cost of moving to v + v's heuristic
     #         if v is not visited and new_cost < v.total_cost:
-    #             let v.parent = next
+    #             let v.parent = u
     #             let v.total_cost = new_cost
     #             let v.dist = u.dist + cost of moving to v
     #             add v to discovered
