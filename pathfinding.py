@@ -20,29 +20,7 @@ def depth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gener
     #             let v.parent = next
     #             add v to the end of to_be_visited
 
-    to_be_visited = [start]
-
-    while not end.visited and len(to_be_visited) > 0:
-        u = to_be_visited.pop()
-
-        u.visited = True
-
-        if u == end:
-            break
-
-        for v in u.get_neighbours(board):
-            if not v.visited:
-                v.parent = u
-                if v in to_be_visited:
-                    to_be_visited.remove(v)
-                to_be_visited.append(v)
-
-        yield u.get_path()
-
-    if end.visited:
-        yield end.get_path()
-    else:
-        yield []
+    pass
 
 
 def breadth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
@@ -61,27 +39,7 @@ def breadth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gen
     #             let v.parent = next
     #             add v to the end of to_be_visited
 
-    to_be_visited = [start]
-
-    while not end.visited and len(to_be_visited) > 0:
-        u = to_be_visited.pop(0)
-
-        u.visited = True
-
-        if u == end:
-            break
-
-        for v in u.get_neighbours(board):
-            if not v.visited and v not in to_be_visited:
-                v.parent = u
-                to_be_visited.append(v)
-
-        yield u.get_path()
-
-    if end.visited:
-        yield end.get_path()
-    else:
-        yield []
+    pass
 
 
 def dijkstra(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
@@ -104,36 +62,7 @@ def dijkstra(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[
     #             let v.total_cost = new_cost
     #             add v to to_be_visited
 
-    to_be_visited = {start}
-
-    for row in board:
-        for cell in row:
-            cell.total_cost = float("inf")
-
-    start.total_cost = 0
-
-    while not end.visited and len(to_be_visited) > 0:
-        u = sorted(to_be_visited, key=lambda c: c.total_cost)[0]
-        to_be_visited.remove(u)
-
-        u.visited = True
-
-        if u == end:
-            break
-
-        for v in u.get_neighbours(board):
-            new_cost = u.total_cost + v.get_cost()
-            if not v.visited and new_cost < v.total_cost:
-                v.parent = u
-                v.total_cost = new_cost
-                to_be_visited.add(v)
-
-        yield u.get_path()
-
-    if end.visited:
-        yield end.get_path()
-    else:
-        yield []
+    pass
 
 
 def a_star(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
@@ -162,38 +91,4 @@ def a_star(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Ce
     #             let v.dist = u.dist + cost of moving to v
     #             add v to to_be_visited
 
-    to_be_visited = {start}
-
-    for row in board:
-        for cell in row:
-            cell.total_cost = float("inf")
-            cell.dist = float("inf")
-
-            cell.heuristic = math.sqrt((cell.x - end.x) ** 2 + (cell.y - end.y) ** 2)
-
-    start.total_cost = start.heuristic
-    start.dist = 0
-
-    while not end.visited and len(to_be_visited) > 0:
-        u = sorted(to_be_visited, key=lambda c: c.total_cost)[0]
-        to_be_visited.remove(u)
-
-        u.visited = True
-
-        if u == end:
-            break
-
-        for v in u.get_neighbours(board):
-            new_cost = u.dist + v.get_cost() + v.heuristic
-            if not v.visited and new_cost < v.total_cost:
-                v.parent = u
-                v.total_cost = new_cost
-                v.dist = u.dist + v.get_cost()
-                to_be_visited.add(v)
-
-        yield u.get_path()
-
-    if end.visited:
-        yield end.get_path()
-    else:
-        yield []
+    pass
