@@ -49,7 +49,7 @@ def assign_path_generator(i: int):
                                           board[end_pos[1]][end_pos[0]])
     if path_generator is None:
         return
-    
+
     drawing = False
     for row in board:
         for cell in row:
