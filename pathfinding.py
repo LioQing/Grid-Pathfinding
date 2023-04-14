@@ -5,7 +5,7 @@ from typing import Generator
 
 
 def depth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
-    # discovered = a set containing start cell
+    # let discovered = a set containing start cell
     #
     # while end cell is not visited and discovered is not empty:
     #     let u = pop the latest cell from discovered
@@ -46,7 +46,7 @@ def depth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gener
 
 
 def breadth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
-    # discovered = a set containing start cell
+    # let discovered = a set containing start cell
     #
     # while end cell is not visited and discovered is not empty
     #     let u = pop the earliest cell from discovered
@@ -85,7 +85,7 @@ def breadth_first_search(board: list[list[Cell]], start: Cell, end: Cell) -> Gen
 
 
 def dijkstra(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
-    # discovered = a sorted set containing start cell
+    # let discovered = a sorted set containing start cell
     # set all cells' total cost to infinity
     # set start cell's total cost to 0
     #
@@ -137,7 +137,7 @@ def dijkstra(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[
 
 
 def a_star(board: list[list[Cell]], start: Cell, end: Cell) -> Generator[list[Cell], None, None]:
-    # discovered = a sorted set containing start cell
+    # let discovered = a sorted set containing start cell
     # set all cells' total cost to infinity
     # set all cells' dist to infinity
     #
