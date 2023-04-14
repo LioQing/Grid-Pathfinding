@@ -10,7 +10,8 @@ from cell import Cell
 # left ctrl + left mouse button  : set end cell
 # right shift                    : save board
 # right ctrl                     : load board
-# enter                          : start/stop pathfinding
+# 1 - 4                          : select and run pathfinding algorithm
+# enter                          : stop running pathfinding algorithm
 
 # configurations
 CELL_SIZE = 40
@@ -18,14 +19,20 @@ WIDTH = 20
 HEIGHT = 20
 
 # pathfinding settings
-pathfinding_algo = pathfinding.depth_first_search
-pathfinding_fps = 20
+pathfinding_algos = [
+    pathfinding.depth_first_search,
+    pathfinding.breadth_first_search,
+    pathfinding.dijkstra,
+    pathfinding.a_star
+]
+pathfinding_fps = 30
 
 # create board and other variables
 board = [[Cell(x, y) for x in range(WIDTH)] for y in range(HEIGHT)]
 start_pos = (0, 0)
 end_pos = (WIDTH - 1, HEIGHT - 1)
 drawing = True
+path_generator = None
 
 board[start_pos[1]][start_pos[0]].type = Cell.START_TYPE
 board[end_pos[1]][end_pos[0]].type = Cell.END_TYPE
@@ -33,6 +40,36 @@ board[end_pos[1]][end_pos[0]].type = Cell.END_TYPE
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH * CELL_SIZE, HEIGHT * CELL_SIZE))
+
+
+def assign_path_generator(i: int):
+    global path_generator
+    global drawing
+    path_generator = pathfinding_algos[i](board, board[start_pos[1]][start_pos[0]],
+                                          board[end_pos[1]][end_pos[0]])
+    drawing = False
+    for row in board:
+        for cell in row:
+            cell.reset_pathfinding_data()
+
+
+def get_mouse_cell_pos():
+    x, y = pygame.mouse.get_pos()
+    x = x // CELL_SIZE
+    y = y // CELL_SIZE
+
+    if x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT:
+        return None
+    return x, y
+
+
+def enter_draw_mode():
+    global drawing
+    drawing = True
+    for row in board:
+        for cell in row:
+            cell.reset_pathfinding_data()
+
 
 # main loop
 while True:
@@ -42,27 +79,30 @@ while True:
             pygame.quit()
             quit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                drawing = not drawing
-                for row in board:
-                    for cell in row:
-                        cell.reset_pathfinding_data()
 
-                if not drawing:
-                    path_generator = pathfinding_algo(board, board[start_pos[1]][start_pos[0]],
-                                                      board[end_pos[1]][end_pos[0]])
-            elif drawing:
+            if event.key == pygame.K_1:
+                assign_path_generator(0)
+            elif event.key == pygame.K_2:
+                assign_path_generator(1)
+            elif event.key == pygame.K_3:
+                assign_path_generator(2)
+            elif event.key == pygame.K_4:
+                assign_path_generator(3)
+
+            if drawing:
                 if event.key == pygame.K_DELETE:
                     for row in board:
                         for cell in row:
                             cell.type = Cell.EMPTY
-                elif event.key == pygame.K_RSHIFT:
+
+                if event.key == pygame.K_RSHIFT:
                     with open('board.txt', 'w') as f:
                         for row in board:
                             for cell in row:
                                 f.write(str(cell.type))
                             f.write('\n')
-                elif event.key == pygame.K_RCTRL:
+
+                if event.key == pygame.K_RCTRL:
                     with open('board.txt', 'r') as f:
                         for y, row in enumerate(f.readlines()):
                             row = row.strip()
@@ -72,17 +112,11 @@ while True:
                                     start_pos = (x, y)
                                 elif board[y][x].type == Cell.END_TYPE:
                                     end_pos = (x, y)
+            else:
+                if event.key == pygame.K_RETURN:
+                    enter_draw_mode()
     # update
     if drawing:
-        def get_mouse_cell_pos():
-            x, y = pygame.mouse.get_pos()
-            x = x // CELL_SIZE
-            y = y // CELL_SIZE
-
-            if x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT:
-                return None
-            return x, y
-
         if pygame.mouse.get_pressed()[0]:
             cell_pos = get_mouse_cell_pos()
             if cell_pos is not None and cell_pos != start_pos and cell_pos != end_pos:
@@ -139,10 +173,15 @@ while True:
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        drawing = not drawing
-                        for row in board:
-                            for cell in row:
-                                cell.reset_pathfinding_data()
+                        enter_draw_mode()
+                    elif event.key == pygame.K_1:
+                        assign_path_generator(0)
+                    elif event.key == pygame.K_2:
+                        assign_path_generator(1)
+                    elif event.key == pygame.K_3:
+                        assign_path_generator(2)
+                    elif event.key == pygame.K_4:
+                        assign_path_generator(3)
             pygame.display.update()
 
     pygame.display.update()
