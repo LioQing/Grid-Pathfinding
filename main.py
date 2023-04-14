@@ -47,6 +47,9 @@ def assign_path_generator(i: int):
     global drawing
     path_generator = pathfinding_algos[i](board, board[start_pos[1]][start_pos[0]],
                                           board[end_pos[1]][end_pos[0]])
+    if path_generator is None:
+        return
+    
     drawing = False
     for row in board:
         for cell in row:
